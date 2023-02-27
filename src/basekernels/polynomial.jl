@@ -50,6 +50,9 @@ end
 
 Base.show(io::IO, κ::LinearKernel) = print(io, "Linear Kernel (c = ", only(κ.c), ")")
 
+Base.hash(k::LinearKernel, h::UInt) = hash(k.c, hash(nameof(typeof(k)), h))
+Base.:(==)(k1::LinearKernel, k2::LinearKernel) = isequal(k1.c, k2.c)
+
 """
     PolynomialKernel(; degree::Int=2, c::Real=0.0)
 
@@ -114,4 +117,9 @@ end
 
 function Base.show(io::IO, κ::PolynomialKernel)
     return print(io, "Polynomial Kernel (c = ", only(κ.c), ", degree = ", κ.degree, ")")
+end
+
+Base.hash(k::PolynomialKernel, h::UInt) = hash(k.c, hash(k.degree, hash(nameof(typeof(k)), h)))
+function Base.:(==)(k1::PolynomialKernel, k2::PolynomialKernel)
+    return isequal(k1.c, k2.c) && isequal(k1.degree, k2.degree)
 end

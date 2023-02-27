@@ -144,3 +144,6 @@ function kernelmatrix_diag!(
 end
 
 Base.show(io::IO, κ::ConstantKernel) = print(io, "Constant Kernel (c = ", only(κ.c), ")")
+
+Base.hash(k::ConstantKernel, h::UInt) = hash(k.c, hash(nameof(typeof(k)), h))
+Base.:(==)(k1::ConstantKernel, k2::ConstantKernel) = isequal(k1.c, k2.c)

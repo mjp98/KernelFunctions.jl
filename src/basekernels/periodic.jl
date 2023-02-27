@@ -39,3 +39,6 @@ kappa(::PeriodicKernel, d::Real) = exp(-0.5d)
 function Base.show(io::IO, κ::PeriodicKernel)
     return print(io, "Periodic Kernel, length(r) = $(length(κ.r))")
 end
+
+Base.hash(k::PeriodicKernel, h::UInt) = hash(k.r, hash(nameof(typeof(k)), h))
+Base.:(==)(k1::PeriodicKernel, k2::PeriodicKernel) = isequal(k1.r, k2.r)

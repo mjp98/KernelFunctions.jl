@@ -61,6 +61,11 @@ function Base.show(io::IO, κ::RationalKernel)
     return print(io, "Rational Kernel (α = ", only(κ.α), ", metric = ", κ.metric, ")")
 end
 
+Base.hash(k::RationalKernel, h::UInt) = metric_hash(k.metric, hash(k.α, hash(nameof(typeof(k)), h)))
+function Base.:(==)(k1::RationalKernel, k2::RationalKernel)
+    return isequal(k1.α, k2.α) && metric_isequal(k1.metric, k2.metric)
+end
+
 """
     RationalQuadraticKernel(; α::Real=2.0, metric=Euclidean())
 
@@ -148,6 +153,13 @@ function Base.show(io::IO, κ::RationalQuadraticKernel)
     )
 end
 
+function Base.hash(k::RationalQuadraticKernel, h::UInt)
+    return metric_hash(k.metric, hash(k.α, hash(nameof(typeof(k)), h)))
+end
+function Base.:(==)(k1::RationalQuadraticKernel, k2::RationalQuadraticKernel)
+    return isequal(k1.α, k2.α) && metric_isequal(k1.metric, k2.metric)
+end
+
 """
     GammaRationalKernel(; α::Real=2.0, γ::Real=1.0, metric=Euclidean())
 
@@ -219,4 +231,11 @@ function Base.show(io::IO, κ::GammaRationalKernel)
         κ.metric,
         ")",
     )
+end
+
+function Base.hash(k::GammaRationalKernel, h::UInt)
+    return metric_hash(k.metric, hash(k.γ, hash(k.α, hash(nameof(typeof(k)), h))))
+end
+function Base.:(==)(k1::GammaRationalKernel, k2::GammaRationalKernel)
+    return isequal(k1.α, k2.α) && isequal(k1.γ, k2.γ) && metric_isequal(k1.metric, k2.metric)
 end

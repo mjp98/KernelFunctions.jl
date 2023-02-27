@@ -55,6 +55,11 @@ function Base.show(io::IO, κ::MaternKernel)
     return print(io, "Matern Kernel (ν = ", only(κ.ν), ", metric = ", κ.metric, ")")
 end
 
+Base.hash(k::MaternKernel, h::UInt) = metric_hash(k.metric, hash(k.ν, hash(nameof(typeof(k)), h)))
+function Base.:(==)(k1::MaternKernel, k2::MaternKernel)
+    return isequal(k1.ν, k2.ν) && metric_isequal(k1.metric, k2.metric)
+end
+
 ## Matern12Kernel = ExponentialKernel aliased in exponential.jl
 
 """

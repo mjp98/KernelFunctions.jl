@@ -87,3 +87,6 @@ function kernelmatrix_diag(κ::FBMKernel, x::AbstractVector, y::AbstractVector)
     modxy = colwise(SqEuclidean(), x, y)
     return _fbm.(_mod(x), _mod(y), modxy, only(κ.h))
 end
+
+Base.hash(k::FBMKernel, h::UInt) = hash(k.h, hash(nameof(typeof(k)), h))
+Base.:(==)(k1::FBMKernel, k2::FBMKernel) = isequal(k1.h, k2.h)

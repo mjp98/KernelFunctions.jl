@@ -148,3 +148,10 @@ function Base.show(io::IO, κ::GammaExponentialKernel)
         io, "Gamma Exponential Kernel (γ = ", only(κ.γ), ", metric = ", κ.metric, ")"
     )
 end
+
+function Base.hash(k::GammaExponentialKernel, h::UInt)
+    return metric_hash(k.metric, hash(k.γ, hash(nameof(typeof(k)), h)))
+end
+function Base.:(==)(k1::GammaExponentialKernel, k2::GammaExponentialKernel)
+    return isequal(k1.γ, k2.γ) && metric_isequal(k1.metric, k2.metric)
+end
