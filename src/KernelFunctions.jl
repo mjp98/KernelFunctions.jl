@@ -75,6 +75,7 @@ include("distances/pairwise.jl")
 include("distances/dotproduct.jl")
 include("distances/delta.jl")
 include("distances/sinus.jl")
+include("distances/isequal.jl")
 
 include("transform/transform.jl")
 include("transform/scaletransform.jl")
