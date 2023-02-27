@@ -21,3 +21,6 @@ Distances.result_type(::Sinus{T}, Ta::Type, Tb::Type) where {T} = promote_type(T
     end
     return sum(abs2, sinpi.(a - b) ./ d.r)
 end
+
+Base.hash(d::Sinus, h::UInt) = hash(d.r, hash(nameof(typeof(d)), h))
+Base.:(==)(d1::Sinus, d2::Sinus) = isequal(d1.r, d2.r)
