@@ -155,6 +155,7 @@ include("test_utils.jl")
             include("distances/dotproduct.jl")
             include("distances/delta.jl")
             include("distances/sinus.jl")
+            include("distances/isequal.jl")
         end
         @info "Ran tests on Distances"
 
