@@ -41,3 +41,6 @@ _map(t::LinearTransform, x::RowVecs) = RowVecs(x.X * t.A')
 function Base.show(io::IO, t::LinearTransform)
     return print(io::IO, "Linear transform (size(A) = ", size(t.A), ")")
 end
+
+Base.hash(t::LinearTransform, h::UInt) = hash(t.A, hash(nameof(typeof(t)), h))
+Base.:(==)(t1::LinearTransform, t2::LinearTransform) = isequal(t1.A, t2.A)

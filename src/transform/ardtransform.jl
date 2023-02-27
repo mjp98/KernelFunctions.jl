@@ -44,6 +44,7 @@ function _map(t::ARDTransform, x::RowVecs)
     return RowVecs(x.X .* (ones(eltype(t.v), size(x.X, 1)) * collect(t.v')))
 end
 
-Base.isequal(t::ARDTransform, t2::ARDTransform) = isequal(t.v, t2.v)
-
 Base.show(io::IO, t::ARDTransform) = print(io, "ARD Transform (dims: ", dim(t), ")")
+
+Base.hash(t::ARDTransform, h::UInt) = hash(t.v, hash(nameof(typeof(t)), h))
+Base.:(==)(t1::ARDTransform, t2::ARDTransform) = isequal(t1.v, t2.v)

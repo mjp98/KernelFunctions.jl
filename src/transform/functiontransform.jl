@@ -42,3 +42,6 @@ end
 duplicate(t::FunctionTransform, f) = FunctionTransform(f)
 
 Base.show(io::IO, t::FunctionTransform) = print(io, "Function Transform: ", t.f)
+
+Base.hash(t::FunctionTransform, h::UInt) = hash(t.f, hash(nameof(typeof(t)), h))
+Base.:(==)(t1::FunctionTransform, t2::FunctionTransform) = isequal(t1.f, t2.f)

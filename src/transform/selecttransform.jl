@@ -32,3 +32,6 @@ _wrap(x::AbstractVector, ::Any) = x
 _wrap(X::AbstractMatrix, ::Type{T}) where {T} = T(X)
 
 Base.show(io::IO, t::SelectTransform) = print(io, "Select Transform (dims: ", t.select, ")")
+
+Base.hash(t::SelectTransform, h::UInt) = hash(t.select, hash(nameof(typeof(t)), h))
+Base.:(==)(t1::SelectTransform, t2::SelectTransform) = isequal(t1.select, t2.select)

@@ -60,3 +60,6 @@ function printshifted(io::IO, t::ChainTransform, shift::Int)
         printshifted(io, t.transforms[i], shift + 2)
     end
 end
+
+Base.hash(t::ChainTransform, h::UInt) = hash(t.transforms, hash(nameof(typeof(t)), h))
+Base.:(==)(t1::ChainTransform, t2::ChainTransform) = isequal(t1.transforms, t2.transforms)

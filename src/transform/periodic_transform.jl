@@ -38,3 +38,6 @@ end
 function Base.show(io::IO, t::PeriodicTransform)
     return print(io, "Periodic Transform with frequency $(only(t.f))")
 end
+
+Base.hash(t::PeriodicTransform, h::UInt) = hash(t.f, hash(nameof(typeof(t)), h))
+Base.:(==)(t1::PeriodicTransform, t2::PeriodicTransform) = isequal(only(t1.f), only(t2.f))
