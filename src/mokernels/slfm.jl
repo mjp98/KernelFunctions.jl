@@ -60,3 +60,10 @@ function Base.show(io::IO, ::MIME"text/plain", k::LatentFactorMOKernel)
     print(io, "\n\teᵢ: ")
     return join(io, k.e, "\n\t\t")
 end
+
+function Base.hash(k::LatentFactorMOKernel, h::UInt)
+    return hash(k.A, hash(k.e, hash(k.g, hash(nameof(typeof(k)), h))))
+end
+function Base.:(==)(k1::LatentFactorMOKernel, k2::LatentFactorMOKernel)
+    return isequal(k1.g, k2.g) && isequal(k1.e, k2.e) && isequal(k1.A, k2.A)
+end

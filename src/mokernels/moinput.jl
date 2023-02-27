@@ -88,6 +88,13 @@ function Base.vcat(x::MOInputIsotopicByOutputs, y::MOInputIsotopicByOutputs)
     return MOInputIsotopicByOutputs(vcat(x.x, y.x), x.out_dim)
 end
 
+function Base.hash(x::IsotopicMOInputsUnion, h::UInt)
+    return hash(x.x, hash(x.out_dim, hash(nameof(typeof(x)), h)))
+end
+function Base.:(==)(x1::IsotopicMOInputsUnion, x2::IsotopicMOInputsUnion)
+    return isequal(x1.x, x2.x) && isequal(x1.out_dim, x2.out_dim) && nameof(typeof(x1)) == nameof(typeof(x2))
+end
+
 """
     MOInput(x::AbstractVector, out_dim::Integer)
 

@@ -2,7 +2,7 @@
     LinearMixingModelKernel(k::Kernel, H::AbstractMatrix)
     LinearMixingModelKernel(Tk::AbstractVector{<:Kernel},Th::AbstractMatrix)
 
-Kernel associated with the linear mixing model, taking a vector of `Q` kernels and a `Q × m` mixing matrix H for a function with `m` outputs. Also accepts a single kernel `k` for use across all `Q` basis vectors. 
+Kernel associated with the linear mixing model, taking a vector of `Q` kernels and a `Q × m` mixing matrix H for a function with `m` outputs. Also accepts a single kernel `k` for use across all `Q` basis vectors.
 
 # Definition
 
@@ -47,4 +47,11 @@ function Base.show(io::IO, mime::MIME"text/plain", k::LinearMixingModelKernel)
         print(io, "\n\t")
         show(io, mime, k)
     end
+end
+
+function Base.hash(k::LinearMixingModelKernel, h::UInt)
+    return hash(k.H, hash(k.K, hash(nameof(typeof(k)), h)))
+end
+function Base.:(==)(k1::LinearMixingModelKernel, k2::LinearMixingModelKernel)
+    return isequal(k1.K, k2.K) && isequal(k1.H, k2.H)
 end

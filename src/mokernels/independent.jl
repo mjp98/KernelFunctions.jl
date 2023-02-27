@@ -54,3 +54,10 @@ end
 function Base.show(io::IO, k::IndependentMOKernel)
     return print(io, string("Independent Multi-Output Kernel\n\t", string(k.kernel)))
 end
+
+function Base.hash(k::IndependentMOKernel, h::UInt)
+    return hash(k.kernel, hash(nameof(typeof(k)), h))
+end
+function Base.:(==)(k1::IndependentMOKernel, k2::IndependentMOKernel)
+    return isequal(k1.kernel, k2.kernel)
+end

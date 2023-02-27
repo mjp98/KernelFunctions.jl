@@ -74,3 +74,10 @@ function Base.show(io::IO, k::IntrinsicCoregionMOKernel)
         io, "Intrinsic Coregion Kernel: ", k.kernel, " with ", size(k.B, 1), " outputs"
     )
 end
+
+function Base.hash(k::IntrinsicCoregionMOKernel, h::UInt)
+    return hash(k.B, hash(k.kernel, hash(nameof(typeof(k)), h)))
+end
+function Base.:(==)(k1::IntrinsicCoregionMOKernel, k2::IntrinsicCoregionMOKernel)
+    return isequal(k1.kernel, k2.kernel) && isequal(k1.B, k2.B)
+end
