@@ -84,6 +84,11 @@ function test_interface(
     tmp_diag = Vector{Float64}(undef, length(x0))
     @test kernelmatrix_diag!(tmp_diag, k, x0) ≈ kernelmatrix_diag(k, x0)
     @test kernelmatrix_diag!(tmp_diag, k, x0, x1) ≈ kernelmatrix_diag(k, x0, x1)
+
+    # Check that two instances of the same kernel are equal
+    @test k == deepcopy(k)
+    @test k !== 2 * k
+    @test hash(k) == hash(deepcopy(k))
 end
 
 """
@@ -113,8 +118,8 @@ end
         x2::AbstractVector,
     )
 
-Run type stability checks over `k(x,y)` and the different functions of the API 
-(`kernelmatrix`, `kernelmatrix_diag`). `x0` and `x1` should be of the same 
+Run type stability checks over `k(x,y)` and the different functions of the API
+(`kernelmatrix`, `kernelmatrix_diag`). `x0` and `x1` should be of the same
 length with different values, while `x0` and `x2` should be of different lengths.
 """
 function test_type_stability(
