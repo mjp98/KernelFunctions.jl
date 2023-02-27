@@ -32,6 +32,30 @@ struct MyKernel <: KernelFunctions.Kernel end
 
 Note that the fallback implementation of the base `Kernel` evaluation does not use `Distances.jl` and can therefore be a bit slower.
 
+### Equality
+
+The interface tests include basic tests that `Base.hash` and `Base.:(==)`. 
+It is necessary to overload these functions specially when a kernel is parametrized by a mutable type, such as a `Vector`.
+The expectation is that two kernels `k1` and `k2` may (and as far as possible should) be equal `k1==k2` if all of
+
+1. `nameof(typeof(k1)) == nameof(typeof(k2))` same base `struct` type (stripped of parameters)
+2. all parameters are `isequal`
+3. `isequal(k1(x, y), k2(x, y))` for any `x` and `y`
+
+The precise implementation and behaviour is left to the user.
+
+As an example, the implementation for `PeriodicKernel` is
+
+```julia
+struct PeriodicKernel{T} <: SimpleKernel
+    r::Vector{T}
+    # constructor ...
+end
+
+Base.hash(k::PeriodicKernel, h::UInt) = hash(k.r, hash(nameof(typeof(k)), h))
+Base.:(==)(k1::PeriodicKernel, k2::PeriodicKernel) = isequal(k1.r, k2.r)
+```
+
 ### Additional Options
 
 Finally there are additional functions you can define to bring in more features:
