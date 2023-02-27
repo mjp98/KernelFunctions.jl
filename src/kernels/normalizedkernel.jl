@@ -81,3 +81,6 @@ function printshifted(io::IO, κ::NormalizedKernel, shift::Int)
     end
     return printshifted(io, κ.kernel, shift + 1)
 end
+
+Base.hash(k::NormalizedKernel, h::UInt) = hash(k.kernel, hash(nameof(typeof(k)), h))
+Base.:(==)(k1::NormalizedKernel, k2::NormalizedKernel) = isequal(k1.kernel, k2.kernel)

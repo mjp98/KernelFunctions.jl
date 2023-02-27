@@ -182,6 +182,14 @@ function Base.:(==)(x::KernelTensorProduct, y::KernelTensorProduct)
     )
 end
 
+function Base.hash(x::KernelTensorProduct, h::UInt)
+    return hash((x.kernels), hash(nameof(typeof(x)), h))
+end
+
+function Base.hash(x::KernelTensorProduct{K}, h::UInt) where K <: Base.Generator
+    return hash(collect(x.kernels), hash(nameof(typeof(x)), h))
+end
+
 function printshifted(io::IO, kernel::KernelTensorProduct, shift::Int)
     print(io, "Tensor product of ", length(kernel), " kernels:")
     for k in kernel.kernels

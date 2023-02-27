@@ -77,3 +77,10 @@ function printshifted(io::IO, κ::ScaledKernel, shift::Int)
     printshifted(io, κ.kernel, shift)
     return print(io, "\n" * ("\t"^(shift + 1)) * "- σ² = $(only(κ.σ²))")
 end
+
+function Base.hash(k::ScaledKernel, h::UInt)
+    return hash(k.σ², hash(k.kernel, hash(nameof(typeof(k)), h)))
+end
+function Base.:(==)(k1::ScaledKernel, k2::ScaledKernel)
+    return isequal(k1.kernel, k2.kernel) && isequal(k1.σ², k2.σ²)
+end

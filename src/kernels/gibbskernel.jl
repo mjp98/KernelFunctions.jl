@@ -44,3 +44,8 @@ function (k::GibbsKernel)(x, y)
     kernel = (sqrt(lx * ly) / l) * with_lengthscale(SqExponentialKernel(), l)
     return kernel(x, y)
 end
+
+Base.hash(k::GibbsKernel, h::UInt) = hash(k.lengthscale, hash(nameof(typeof(k)), h))
+function Base.:(==)(k1::GibbsKernel, k2::GibbsKernel)
+    return isequal(k1.lengthscale, k2.lengthscale)
+end

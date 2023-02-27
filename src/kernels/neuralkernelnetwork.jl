@@ -13,6 +13,9 @@ function Base.show(io::IO, layer::LinearLayer)
     return print(io, "LinearLayer(", size(layer.W, 2), ", ", size(layer.W, 1), ")")
 end
 
+Base.hash(layer::LinearLayer, h::UInt) = hash(layer.W, hash(nameof(typeof(layer)), h))
+Base.:(==)(layer1::LinearLayer, layer2::LinearLayer) = isequal(layer1.W, layer2.W)
+
 # Product function, given an 2d array whose size is M×N, product layer will
 # multiply every m neighboring rows of the array elementwisely to obtain
 # an new array of size (M÷m)×N
@@ -48,6 +51,9 @@ function Base.show(io::IO, layer::Primitive)
     join(io, layer.kernels, ", ")
     return print(io, ")")
 end
+
+Base.hash(p::Primitive, h::UInt) = hash(p.kernels, hash(nameof(typeof(p)), h))
+Base.:(==)(p1::Primitive, p2::Primitive) = isequal(p1.kernels, p2.kernels)
 
 """
     NeuralKernelNetwork(primitives, nn)
@@ -122,4 +128,11 @@ function Base.show(io::IO, kernel::NeuralKernelNetwork)
     print(io, "NeuralKernelNetwork(")
     join(io, [kernel.primitives, kernel.nn], ", ")
     return print(io, ")")
+end
+
+function Base.hash(k::NeuralKernelNetwork, h::UInt)
+    return hash(k.primitives, hash(k.nn, hash(nameof(typeof(k)), h)))
+end
+function Base.:(==)(k1::NeuralKernelNetwork, k2::NeuralKernelNetwork)
+    return isequal(k1.primitives, k2.primitives) && isequal(k1.nn, k2.nn)
 end

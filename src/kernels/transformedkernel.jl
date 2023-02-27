@@ -116,3 +116,10 @@ end
 function kernelmatrix(κ::TransformedKernel, x::AbstractVector, y::AbstractVector)
     return kernelmatrix(κ.kernel, _map(κ.transform, x), _map(κ.transform, y))
 end
+
+function Base.hash(k::TransformedKernel, h::UInt)
+    return hash(k.transform, hash(k.kernel, hash(nameof(typeof(k)), h)))
+end
+function Base.:(==)(k1::TransformedKernel, k2::TransformedKernel)
+    return isequal(k1.kernel, k2.kernel) && isequal(k1.transform, k2.transform)
+end

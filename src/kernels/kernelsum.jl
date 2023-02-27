@@ -5,8 +5,8 @@ Create a sum of kernels. One can also use the operator `+`.
 
 There are various ways in which you create a `KernelSum`:
 
-The simplest way to specify a `KernelSum` would be to use the overloaded `+` operator. This is 
-equivalent to creating a `KernelSum` by specifying the kernels as the arguments to the constructor.  
+The simplest way to specify a `KernelSum` would be to use the overloaded `+` operator. This is
+equivalent to creating a `KernelSum` by specifying the kernels as the arguments to the constructor.
 ```jldoctest kernelsum
 julia> k1 = SqExponentialKernel(); k2 = LinearKernel(); X = rand(5);
 
@@ -20,8 +20,8 @@ julia> kernelmatrix(k, X) == kernelmatrix(k1 + k2, X)
 true
 ```
 
-You could also specify a `KernelSum` by providing a `Tuple` or a `Vector` of the 
-kernels to be summed. We suggest you to use a `Tuple` when you have fewer components  
+You could also specify a `KernelSum` by providing a `Tuple` or a `Vector` of the
+kernels to be summed. We suggest you to use a `Tuple` when you have fewer components
 and a `Vector` when dealing with a large number of components.
 ```jldoctest kernelsum
 julia> KernelSum((k1, k2)) == k1 + k2
@@ -74,6 +74,8 @@ function Base.:(==)(x::KernelSum, y::KernelSum)
         all(kx == ky for (kx, ky) in zip(x.kernels, y.kernels))
     )
 end
+
+Base.hash(x::KernelSum, h::UInt) = hash(x.kernels, hash(nameof(typeof(x)), h))
 
 function printshifted(io::IO, κ::KernelSum, shift::Int)
     print(io, "Sum of $(length(κ)) kernels:")
